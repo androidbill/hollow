@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14201a">
+  <title>Hollow</title>
+  <link rel="stylesheet" href="ui/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Hollow</h1>
+    <span id="round"></span>
+    <span id="roomtag"></span>
+    <button id="help" class="ghost" aria-label="How to play" title="How to play">?</button>
+    <button id="mute" class="ghost" aria-label="Sound on" aria-pressed="false" title="Sound">🔊</button>
+    <button id="newgame" class="ghost">Menu</button>
+  </header>
+
+  <main>
+    <section id="boardwrap">
+      <div id="status"><span id="status-text"></span><span id="clock"></span></div>
+      <div id="board"></div>
+    </section>
+
+    <aside>
+      <div id="coach" hidden></div>
+      <ul id="scores"></ul>
+      <div id="faction-info"></div>
+      <div id="away" hidden>
+        <p>You were away, so a bot has been playing for you.</p>
+        <button id="away-back" class="act end">Take my seat back</button>
+      </div>
+      <div id="actions"></div>
+      <h3 class="logtitle">Log</h3>
+      <ul id="log"></ul>
+    </aside>
+  </main>
+
+  <!-- main menu -->
+  <div id="menu" class="overlay">
+    <div class="card">
+      <h2 class="sr">Hollow</h2>
+      <img class="logo" src="assets/logo.jpg" alt="Hollow" width="1086" height="362">
+      <p class="tag">Four factions. One forest. First to 30.</p>
+      <div class="row"><label for="name">Your name</label><input id="name" maxlength="14" placeholder="Player" autocomplete="nickname"></div>
+      <button id="menu-learn" class="go learn">New? Learn to play (tutorial)</button>
+      <button id="menu-solo" class="go">Play solo against bots</button>
+      <h3>With friends</h3>
+      <button id="menu-create" class="go alt">Create a room</button>
+      <div class="row join">
+        <input id="code" maxlength="4" placeholder="CODE" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Room code">
+        <button id="menu-join" class="alt2">Join</button>
+      </div>
+      <button id="resume" class="alt2 wide" hidden></button>
+      <button id="menu-howto" class="ghost wide">How to play (full guide)</button>
+      <label class="check"><input type="checkbox" id="anim-toggle" checked> Animations <small id="anim-note"></small></label>
+      <p id="net-note" class="note"></p>
+    </div>
+  </div>
+
+  <!-- solo setup -->
+  <div id="setup" class="overlay" hidden>
+    <div class="card">
+      <h2>Solo</h2>
+      <h3>Play as</h3>
+      <div id="seats"></div>
+      <div class="row">
+        <label for="level">Bots</label>
+        <select id="level">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+      <button id="start" class="go">Start</button>
+      <button id="setup-back" class="ghost wide">Back</button>
+    </div>
+  </div>
+
+  <!-- lesson chooser -->
+  <div id="lessons" class="overlay" hidden>
+    <div class="card">
+      <h2>Learn to play</h2>
+      <p class="tag">Short hands-on lessons on the real board, one for each faction. Start with the Humans: they teach the ideas every faction shares.</p>
+      <div id="lesson-list"></div>
+      <button id="lessons-back" class="ghost wide">Back</button>
+    </div>
+  </div>
+
+  <!-- room lobby -->
+  <div id="lobby" class="overlay" hidden>
+    <div class="card">
+      <h3 class="first">Room code</h3>
+      <div class="codebox"><span id="lobby-code"></span><button id="lobby-copy" class="mini">Copy</button></div>
+      <p class="tag">Share the code. Friends tap Join and type it in.</p>
+      <ul id="lobby-seats"></ul>
+      <div class="row timer-row">
+        <label for="lobby-timer">Turn timer</label>
+        <select id="lobby-timer" aria-describedby="timer-help"></select>
+      </div>
+      <p id="timer-help" class="note">If someone sits idle this long, their turn is passed. Two in a row and a bot plays for them until they come back.</p>
+      <button id="lobby-start" class="go">Start game</button>
+      <p id="lobby-wait" class="tag" hidden></p>
+      <button id="lobby-leave" class="ghost wide">Leave room</button>
+      <p id="lobby-note" class="note"></p>
+    </div>
+  </div>
+
+  <!-- game over -->
+  <div id="over" class="overlay" hidden>
+    <div class="card small">
+      <img id="over-crest" class="crest big" src="assets/crest-humans.png" alt="">
+      <h2 id="over-title"></h2>
+      <p id="over-sub" class="tag"></p>
+      <button id="again" class="go">Play again</button>
+      <p id="over-wait" class="tag" hidden>Waiting for the host…</p>
+      <button id="over-leave" class="ghost wide">Leave</button>
+    </div>
+  </div>
+
+  <!-- how to play -->
+  <div id="howto" class="overlay guide" hidden role="dialog" aria-modal="true" aria-labelledby="howto-title">
+    <div class="card wide-card">
+      <div class="guide-head">
+        <h2 id="howto-title">How to play</h2>
+        <button id="howto-close" class="ghost" aria-label="Close guide">Close</button>
+      </div>
+      <nav id="howto-nav" aria-label="Guide sections"></nav>
+      <div id="howto-body"></div>
+    </div>
+  </div>
+
+  <div id="toast" hidden></div>
+
+  <script type="module" src="ui/app.js"></script>
+</body>
+</html>

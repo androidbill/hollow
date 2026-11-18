@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "hollow",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/serve.mjs", "5309"],
+      "port": 5309
+    }
+  ]
+}

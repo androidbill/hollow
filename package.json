@@ -1,0 +1,14 @@
+{
+  "name": "hollow",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hollow - an asymmetric woodland war game: Humans, Orcs, Elves and Dwarves",
+  "scripts": {
+    "play": "node scripts/serve.mjs 5309",
+    "test": "node scripts/engine-tests.mjs && node scripts/bot-tests.mjs && node scripts/room-tests.mjs && node scripts/tutorial-tests.mjs && node scripts/fx-tests.mjs",
+    "tournament": "node scripts/tournament.mjs",
+    "bots": "node scripts/bot-tournament.mjs",
+    "move-stats": "node scripts/move-stats.mjs"
+  }
+}

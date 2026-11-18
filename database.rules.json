@@ -1,0 +1,25 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "rooms": {
+      "$code": {
+        ".read": true,
+        ".write": "$code.matches(/^[A-Z]{4}$/)",
+        ".validate": "newData.hasChildren(['code', 'rev', 'status', 'hostId', 'seats']) && newData.child('code').val() === $code && newData.child('status').isString() && (newData.child('status').val() === 'lobby' || newData.child('status').val() === 'playing' || newData.child('status').val() === 'over')",
+        "game": { ".validate": "newData.isString() && newData.val().length < 20000" },
+        "hist": { ".validate": "newData.isString() && newData.val().length < 20000" },
+        "$other": { ".validate": true }
+      }
+    },
+    "presence": {
+      "$code": {
+        ".read": true,
+        "$id": {
+          ".write": "$code.matches(/^[A-Z]{4}$/) && $id.length >= 8 && $id.length <= 64",
+          ".validate": "newData.isBoolean() && newData.val() === true"
+        }
+      }
+    }
+  }
+}
