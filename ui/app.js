@@ -205,8 +205,34 @@ async function beginSolo(seat, level, { lesson = null } = {}) {
   if (lesson) {
     await net.update(code, (r) => ({ ok: true, room: { ...r, game: JSON.stringify(LESSONS[lesson].scenario()), rev: r.rev + 1 } }));
   }
+  state.noSave = !!lesson;
   enter(net, code, { solo: true });
   state.tutorialPending = lesson; // set after enter(), which clears it
+}
+
+// A solo game lives only in this tab's memory, so every position is also written to this
+// device; the menu offers to pick it up again. Lessons are not saved, and a finished game
+// is dropped.
+function saveSolo(room) {
+  if (!state.solo || state.noSave) return;
+  if (room.status !== 'playing' || state.g?.winner) store.del('solo');
+  else store.set('solo', JSON.stringify(room));
+}
+
+function savedSolo() {
+  try {
+    const r = JSON.parse(store.get('solo') || 'null');
+    return r && r.status === 'playing' && r.hostId === state.myId ? r : null;
+  } catch { return null; }
+}
+
+async function resumeSolo() {
+  const room = savedSolo();
+  if (!room) { store.del('solo'); drawMenu(); return; }
+  const net = createMemoryTransport();
+  await net.create('SOLO', room);
+  state.noSave = false;
+  enter(net, 'SOLO', { solo: true });
 }
 
 const startLesson = (id) => beginSolo(LESSONS[id].me, 'medium', { lesson: id });
@@ -268,6 +294,7 @@ function onRoom(room) {
   noteHost(state.room, room);
   const before = { room: state.room, g: state.g };
   state.room = room;
+  saveSolo(room);
   if (room.status === 'lobby') {
     state.g = null;
     state.history = [];
@@ -483,6 +510,13 @@ function drawMenu() {
   const saved = store.get('room');
   $('resume').hidden = !saved;
   if (saved) $('resume').textContent = `Rejoin room ${saved}`;
+  const solo = savedSolo();
+  $('resume-solo').hidden = !solo;
+  if (solo) {
+    const g = roomGame(solo);
+    const me = DEFAULT_ORDER.find((f) => solo.seats[f].id === state.myId);
+    $('resume-solo').textContent = `Resume solo game (round ${g.round}${me ? `, ${NAMES[me]} ${g.vp[me]} VP` : ''})`;
+  }
 }
 
 // The faction a bot is playing for ME because I went away, if any.
@@ -762,6 +796,7 @@ $('menu-create').addEventListener('click', createRoom);
 $('menu-join').addEventListener('click', () => joinRoom($('code').value));
 $('code').addEventListener('input', (e) => { e.target.value = normalizeCode(e.target.value); });
 $('code').addEventListener('keydown', (e) => { if (e.key === 'Enter') joinRoom($('code').value); });
+$('resume-solo').addEventListener('click', resumeSolo);
 $('resume').addEventListener('click', async () => {
   const code = store.get('room');
   if (code) await joinRoom(code);
