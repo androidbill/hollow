@@ -7,6 +7,8 @@ plays by different rules. First to 30 victory points wins.
 Hollow is an independent hobby project, in the tradition of asymmetric
 area-control games. It uses its own names, rules and numbers.
 
+**Play it: https://androidbill.github.io/hollow/** (runs in any modern browser, phone or desktop; no account needed).
+
 **Status: playable solo and in rooms.** A browser board, four bot levels, a
 tested rules engine, and room-code multiplayer over Firebase (see "Online
 rooms"). The numbers are a first balancing pass, not a finished one - see
